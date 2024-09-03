@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fetch Data from API</h1>
+    <button id="fetchButton">Fetch Data</button>
+
+    <div class="result" id="result">
+        <!-- Kết quả sẽ hiển thị ở đây -->
+    </div>
+
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', function() {
+            fetch('https://mekongai.mekongai.com/images_generate/', {
+                method: 'POST',
+                body: {
+  "prompt": "photo of a white cat, cute, fat,", 
+  "model": "SDXL/juggernautXL_v9Rundiffusionphoto2.safetensors",
+  "batch_size": 1,
+  "style": "Default",
+  "image_width": 512,
+  "image_height": 512,
+  "image_steps": 20,
+  "image_cfg": 2.0,
+  "image_denoise": 1.0,
+  "inputSampling": "dpmpp_3m_sde_gpu",
+  "inputScheduler": "sgm_uniform",
+  "image_seed": -1,
+    "id_user": 1,
+    "amount": 200,
+    "status": 1
+}
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
