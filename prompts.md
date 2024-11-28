@@ -23,6 +23,12 @@ Pixar style, MG ip, ragdoll cat, white cat, animal, animal focus, blue shirt ani
 
 (full body:1.3) portrait of a beautiful girl café worker, vietnam, inside, 20 years old beautiful young girl, wearing green polo Coffee shop uniform, (tall), solo, soulful eyes, coffee, white skin, thin, girlvn01, 8k, aesthetic, 
 
+instagram photo, masterpiece, cinematic shot, beautiful face, a pair of soulful eyes that smile,
+front shot, 
+clean background, 
+professional portrait photography of a 20 y.o Asian girl, black hair color, 
+black eyes color, 
+<lora:Asian girl face>
 
 
 ############################################
@@ -40,6 +46,10 @@ cartoon, painting, Illustration, (worst quality, low quality, normal quality:2),
 (worst quality, low quality, normal quality, lowres, low details, oversaturated, undersaturated, overexposed, underexposed, grayscale, bw, bad photo, bad photography, bad art, text, word:1.4), (signature, text font, username, error, words, letters, digits, autograph, trademark, name:1.2), (blur, blurry, grainy), morbid, ugly, asymmetrical, mutated malformed, mutilated, poorly lit, bad shadow, draft, cropped, out of frame, cut off, censored, jpeg artifacts, out of focus, glitch, duplicate, (airbrushed, cartoon, anime, semi-realistic, cgi, render, blender, digital art, manga, amateur:1.3), (3D ,3D Game, 3D Game Scene, 3D Character:1.1), (bad hands, bad anatomy, bad body, bad face, bad teeth, bad arms, bad legs, bad hands, deformities:1.3), fat, text, chinese word, chinese text, korean text, korean word, english text, english word, japan text, japan word,
 
 worst quality, low quality, normal quality, (nsfw, naked, nude, deformed iris, deformed pupils, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, disconnected limbs, mutation, mutated, ugly, disgusting, amputation, {{bad body}}, bad proportion body to legs, wrong toes, extra toes, missing toes, weird toes, 2 body, 2 pussy, 2 upper, 2 lower, 2 head, 3 hand, 3 feet, extra long leg, super long leg, embedding:bad-hands-5, embedding:badhandv4,
+
+
+(worst quality:2), (low quality:2), (normal quality:2), ((monochrome)), ((grayscale)), glans, extra fingers, fewer fingers, (multi nipples), bad anatomy, bad hands, text, error, missing fingers, missing arms, missing legs, extra digit, fewer digits, cropped, worst quality, jpeg artifacts, signature, watermark, username, bad feet, blurry, poorly drawn hands, poorly drawn face, mutation, deformed, extra limbs, extra arms, extra legs, malformed limbs, fused fingers, too many fingers, long neck, cross-eyed, mutated hands, polar lowres, bad body, bad proportions, gross proportions, wrong feet bottom render, abdominal stretch, {{fused fingers}}, {{bad body}}, bad proportion body to legs, wrong toes, extra toes, missing toes, weird toes, 2 body, 2 pussy, 2 upper, 2 lower, 2 head, 3 hand, 3 feet, extra long leg, super long leg, mirrored noise, embedding:bad-hands-5, embedding:badhandv4, embedding:FastNegativeV2,
+
 ```
 
 ### Order Bot

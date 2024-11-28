@@ -64,11 +64,37 @@ sudo cloudflared service install eyJhIjoiMTk1ZjU5NTUzN...
 ### Install Nvidia
 sudo add-apt-repository ppa:graphics-drivers/ppa
 sudo apt install ubuntu-drivers-common
-ubuntu-drivers devices
+sudo ubuntu-drivers devices
 sudo ubuntu-drivers autoinstall
 sudo reboot
 
+
+### Gỡ Nvidia cài lại
+sudo apt-get remove --purge '^nvidia-.*'
+sudo apt-get autoremove
+sudo apt-get autoclean
+sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt-get update
+sudo apt-get install nvidia-driver-535
+sudo reboot
+
+
 # Open VPS and Download models, folder ComfyUI,...
+
+
+############################################################################################################
+### Fix lỗi khi sudo apt update
+sudo apt install --reinstall python3-minimal dh-python
+
+sudo apt-get clean
+sudo apt-get update
+sudo apt-get upgrade
+
+nano /home/ubuntu/mekongai/ai-toolkit/venv/lib/python3.11/site-packages/optimum/quanto/tensor/weights/qbytes.py
+sửa output = torch.ops.quanto.qbytes_mm(input.view(-1, in_features), other
+thành output = torch.ops.quanto.qbytes_mm(input.reshape(-1, in_features), other
+
+python3.11 run.py /home/ubuntu/mekongai/ai-toolkit/config/train_lora_flux_24gb_tonghop.yaml
 
 
 ############################################################################################################
@@ -118,7 +144,9 @@ echo "comfyui:
 
 
 ############################################################################################################
-cd mekongai/saves/
+### SSL cho API
+mkdir ssl
+cd mekongai/ssl/
 
 # Tạo khóa riêng (private key)
 openssl genpkey -algorithm RSA -out server.key -pkeyopt rsa_keygen_bits:2048
@@ -131,7 +159,7 @@ openssl req -new -x509 -key server.key -out server.crt -days 365
 ### API 
 # API MekongAI
 screen -S api-mekongai
-cd mekongai/python-comfyui-gradio
+cd mekongai/mekongai-comfyui
 python3.11 -m venv venv
 source venv/bin/activate
 pip3.11 install -r requirements.txt
@@ -139,13 +167,13 @@ python3.11 app_mekongai.py
 
 # API Public
 screen -S api-public
-cd mekongai/python-comfyui-gradio
+cd mekongai/mekongai-comfyui
 source venv/bin/activate
 python3.11 app_public.py
 
 # API Image
 screen -S api-images
-cd mekongai/python-comfyui-gradio
+cd mekongai/mekongai-comfyui
 source venv/bin/activate
 python3.11 app_images.py
 
@@ -165,24 +193,35 @@ source venv/bin/activate
 pip3.11 install -r requirements.txt
 python3.11 app.py
 
+
+############################################################################################################
+screen -S saves
+mkdir mekongai/saves
+aws s3 cp s3://mekongai/saves mekongai/saves --recursive --profile MAIN
+
+
 ############################################################################################################
 ### Clone ComfyUI Image Generate
 # comfyui-image-generate-1
 screen -S comfyui-image-generate-1
+mkdir mekongai/comfyui-image-generate-1
+aws s3 cp s3://mekongai/comfyui-image-generate-1 mekongai/comfyui-image-generate-1 --recursive --profile MAIN
 cd mekongai/comfyui-image-generate-1/ComfyUI
 source venv/bin/activate
 python3.11 main.py --port 7700 --listen --cuda-device 0
 
 # comfyui-image-generate-2
-cp -r comfyui-image-generate-1 comfyui-image-generate-2
 screen -S comfyui-image-generate-2
+mkdir mekongai/comfyui-image-generate-2
+aws s3 cp s3://mekongai/comfyui-image-generate-2 mekongai/comfyui-image-generate-2 --recursive --profile MAIN
 cd mekongai/comfyui-image-generate-2/ComfyUI
 source venv/bin/activate
 python3.11 main.py --port 7702 --listen --cuda-device 1
 
 # comfyui-image-generate-3
-cp -r comfyui-image-generate-1 comfyui-image-generate-3
 screen -S comfyui-image-generate-3
+mkdir mekongai/comfyui-image-generate-3
+aws s3 cp s3://mekongai/comfyui-image-generate-3 mekongai/comfyui-image-generate-3 --recursive --profile MAIN
 cd mekongai/comfyui-image-generate-3/ComfyUI
 source venv/bin/activate
 python3.11 main.py --port 7704 --listen --cuda-device 2
@@ -216,8 +255,9 @@ source venv/bin/activate
 python3.11 main.py --port 7712 --listen --cuda-device 6
 
 # comfyui-image-generate-8
-cp -r mekongai/comfyui-image-generate-1 mekongai/comfyui-image-generate-8
 screen -S comfyui-image-generate-8
+mkdir mekongai/comfyui-image-generate-8
+aws s3 cp s3://mekongai/comfyui-image-generate-8 mekongai/comfyui-image-generate-8 --recursive --profile MAIN
 cd mekongai/comfyui-image-generate-8/ComfyUI
 source venv/bin/activate
 python3.11 main.py --port 7714 --listen --cuda-device 7
@@ -234,6 +274,8 @@ python3.11 main.py --port 7800 --listen --cuda-device 1
 
 ### ComfyUI Image Outfit Swap
 screen -S comfyui-ootdiffusion-1
+mkdir mekongai/comfyui-ootdiffusion-1
+aws s3 cp s3://mekongai/comfyui-ootdiffusion-1 mekongai/comfyui-ootdiffusion-1 --recursive --profile MAIN
 cd mekongai/comfyui-ootdiffusion-1/ComfyUI
 source venv/bin/activate
 pip3.11 install -r requirements.txt
@@ -290,8 +332,8 @@ aws s3 ls s3://
 # aws s3 cp comfyui-image-generate-8.zip s3://comfyui-image-generate
 # aws s3 cp s3://comfyui-image-generate/comfyui-image-generate-8.zip .
 
-export AWS_ACCESS_KEY_ID=AKIA2GOKAYY6J HWZNJMG; 
-export AWS_SECRET_ACCESS_KEY=GX 4wJfIa+YYv bheU+ZdAABpKfxCI K0plxm04qktN; 
+export AWS_ACCESS_KEY_ID=A
+export AWS_SECRET_ACCESS_KEY=
 mkdir mekongai
 mkdir mekongai/saves
 cd mekongai/saves 
@@ -321,8 +363,8 @@ aws s3 cp s3://bucket-comfyui/comfyui-face-swap-1.zip .
 aws s3 cp s3://bucket-comfyui/comfyui-ootdiffusion-1.zip .
 
 cd mekongai
-export AWS_ACCESS_KEY_ID=AKIA2GOKA YY6JHWZNJMG; 
-export AWS_SECRET_ACCESS_KEY=GX4wJfIa+YYv bheU+ZdAABpKfxC IK0plxm04qktN;
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
 aws s3 cp comfyui-image-generate-8.zip s3://bucket-comfyui/comfyui-image-generate-8.zip
 aws s3 cp comfyui-face-swap-1.zip s3://bucket-comfyui/comfyui-face-swap-1.zip
 aws s3 cp comfyui-ootdiffusion-1.zip s3://bucket-comfyui/comfyui-ootdiffusion-1.zip
@@ -345,12 +387,40 @@ aws s3 sync mekongai s3://playpikk/ --exact-timestamps --profile AUGFY
 aws s3 sync mekongai s3://new-bucket-2fda1afe/ --exact-timestamps --profile HNLSRQ
 aws s3 sync mekongai s3://cdn.leadiffer.cn/tests/ --exact-timestamps
 
+# yolo_train
+aws s3 sync yolo_train s3://mekongai/dung/yolo_train --exact-timestamps --profile MAIN
+aws s3 sync yolo_train s3://mekongai/dung/yolo_train --exact-timestamps --profile AUGFY
+aws s3 sync yolo_train s3://mekongai/dung/yolo_train --exact-timestamps --profile HNLSRQ
+aws s3 sync yolo_train s3://mekongai/dung/yolo_train --exact-timestamps --profile MAIN
+
+# Xem ls s3
+aws s3 ls --profile MAIN
+aws s3 ls s3://playpikk --profile AUGFY
+aws s3 ls s3://new-bucket-2fda1afe --profile HNLSRQ
+aws s3 ls s3://cdn.leadiffer.cn/tests
+
+# Download về
+aws s3 cp s3://mekongai/ mekongai/ --recursive --profile MAIN
+
+mkdir mekongai
+mkdir mekongai/comfyui-image-generate-8
+aws s3 cp s3://mekongai/comfyui-image-generate-8 mekongai/comfyui-image-generate-8 --recursive --profile MAIN
+mkdir mekongai/saves
+aws s3 cp s3://mekongai/saves mekongai/saves --recursive --profile MAIN
+
 ```
 
 
 ### API
 ```bash
-git clone https://github.com/mekongai/mekongai-chatbots.git
+git clone https://github.com/pvbang/mekongai-chatbots.git
 
-git clone https://github.com/mekongai/python-api-mekongai-ai-images.git
+git clone https://github.com/pvbang/python-api-mekongai-ai-images.git
+```
+
+### Fix No space left on device khi df -h vẫn còn
+```sh
+sudo rm -rf /tmp/*
+pip cache purge
+sudo mount -o remount,size=10G /tmp
 ```

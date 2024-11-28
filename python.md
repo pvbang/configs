@@ -69,6 +69,8 @@ source ~/.bashrc
 ### Install library
 ```bash
 pip install -r requirements.txt
+
+# pip freeze > requirements.txt
 ```
 
 ### Fix Permission denied
