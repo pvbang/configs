@@ -215,6 +215,7 @@ git clone git@github.com-mekongai:mekongai/repository.git
 ### Tạo nhánh mới từ nhánh `dev`:
 
 ```bash
+git checkout -b dev origin/dev  # copy nhánh dev từ origin sang device
 git checkout dev  # Chuyển sang nhánh dev
 git pull origin dev  # Đồng bộ với repository trên GitHub
 git checkout -b feature/dev-specific-task  # Tạo nhánh con từ dev
